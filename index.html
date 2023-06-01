@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Sheets Viewer</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Google Sheets Viewer</h1>
+
+  <table id="spreadsheet">
+    <thead>
+      <tr>
+        <th>Column 1</th>
+        <th>Column 2</th>
+        <th>Column 3</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    // Replace 'SPREADSHEET_ID' with the actual ID of your Google Sheets spreadsheet
+    const spreadsheetId = '12APkAHDAILfdzYawR2lfMZ6Oh-G41tkQ';
+
+    // Replace 'SHEET_NAME' with the name of the sheet you want to fetch data from
+    const sheetName = 'sheet1';
+
+    // Fetch data from Google Sheets API
+    fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}?key=AIzaSyA2-30ZlZtY1klg11R_l8WXX1XpuO0zA9Q`)
+      .then(response => response.json())
+      .then(data => {
+        const sheetData = data.values;
+        const tableBody = document.querySelector('#spreadsheet tbody');
+        
+        // Loop through each row in the sheet and create table rows
+        sheetData.forEach(rowData => {
+          const row = document.createElement('tr');
+          rowData.forEach(cellData => {
+            const cell = document.createElement('td');
+            cell.textContent = cellData;
+            row.appendChild(cell);
+          });
+          tableBody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching data from Google Sheets API:', error);
+      });
+  </script>
+</body>
+</html>
